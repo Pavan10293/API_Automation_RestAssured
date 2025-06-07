@@ -1,9 +1,11 @@
 package userManagement;
 
 import io.restassured.RestAssured;
+import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 public class GetUsers {
@@ -35,6 +37,23 @@ public class GetUsers {
 
     }
 
+    @Test
+    public void validateResponseHasItemsAndHasSizeMatchers() {
 
+        RestAssured.baseURI = "https://jsonplaceholder.typicode.com";
+
+        Response response = given()
+                            .when()
+                                .get("/posts")
+                            .then()
+                                .extract().response();
+
+//        System.out.println("Response body :" +
+//                response.body().print();
+
+        //Use Hamcrest to check that the response body contains specific items.
+        assertThat(response.jsonPath().getList("title"), hasItems("qui est esse", "eveniet quod temporibus"));
+        assertThat(response.jsonPath().getList(""), hasSize(100));
+    }
 
 }
