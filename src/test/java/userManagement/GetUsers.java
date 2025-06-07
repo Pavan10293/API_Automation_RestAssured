@@ -75,4 +75,25 @@ public class GetUsers {
         assertThat(response.jsonPath().getList("email"), contains(expectedEmailsArray));
 //        assertThat(response.jsonPath().getList("email"), contains(expectedEmailsList.toArray()));
     }
+
+    @Test
+    public void testGetUsersWithQueryParametersAndValidateAllFieldsOfAnEntity() {
+
+        RestAssured.baseURI = "https://reqres.in/api";
+
+        Response response = given()
+                                .queryParam("page", 2)
+                            .when()
+                                .get("/users");
+
+        System.out.println(response.jsonPath().getMap("data[0]"));
+
+        //is() matcher is pretty much similar to equalTo() matcher.
+        response.then().body("data[0].id", is(7));
+        response.then().body("data[0].email", is("michael.lawson@reqres.in"));
+        response.then().body("data[0].first_name", is("Michael"));
+        response.then().body("data[0].last_name", is("Lawson"));
+        response.then().body("data[0].avatar", is("https://reqres.in/img/faces/7-image.jpg"));
+
+    }
 }
