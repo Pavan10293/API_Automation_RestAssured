@@ -8,8 +8,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.when;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.testng.Assert.assertEquals;
 
 public class GetUsers {
 
@@ -96,4 +98,40 @@ public class GetUsers {
         response.then().body("data[0].avatar", is("https://reqres.in/img/faces/7-image.jpg"));
 
     }
+
+    @Test
+    public void validateStatusCodeWithPathParameterInRequest() {
+
+        Response response = given()
+                                .pathParam("raceSeason", 2017)
+                            .when()
+                                .get("https://ergast.com/api/f1/{raceSeason}/circuits.json");
+
+        int actualStatusCode = response.getStatusCode();
+        assertEquals(actualStatusCode, 200);
+        System.out.println(response.body().asString());
+
+
+    }
+
+    @Test
+    public void validatePostRequestWithFormParam() {
+
+        Response response = given()
+                               .header("x-api-key", "reqres-free-v1")
+                               .contentType("application/x-www-form-urlencoded")
+                               .formParam("name", "John Doe")
+                               .formParam("job", "Developer")
+                            .when()
+                               .post("https://reqres.in/users")
+                            .then()
+                                .extract()
+                                .response();
+
+          response.then().statusCode(201);
+
+//        response.then().body("name", equalTo("John Doe"));
+//        response.then().body("job", equalTo("Developer"));
+    }
+
 }
