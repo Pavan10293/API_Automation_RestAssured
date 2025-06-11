@@ -5,7 +5,9 @@ import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
@@ -133,5 +135,44 @@ public class GetUsers {
 //        response.then().body("name", equalTo("John Doe"));
 //        response.then().body("job", equalTo("Developer"));
     }
+
+    @Test
+    public void automateSingleHeader() {
+
+        given()
+            .header("Content-Type", "application/json")
+        .when()
+             .get("https://reqres.in/api/users?page=2")
+         .then()
+             .statusCode(200);
+
+    }
+
+    @Test
+    public void automateMultipleHeaders() {
+
+        given()
+             .header("Content-Type", "application/json")
+             .header("x-api-key", "reqres-free-v1")
+       .when()
+             .get("https://reqres.in/api/users/2")
+        .then()
+             .statusCode(200);
+
+    }
+
+    @Test
+    public void automateMultipleHeadersUsingMap() {
+
+        Map<String, String> headers = new HashMap<>();
+
+        headers.put("", "");
+        headers.put("", "");
+
+        given().
+            headers(headers);
+
+    }
+
 
 }
