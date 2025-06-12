@@ -1,6 +1,8 @@
 package userManagement;
 
 import io.restassured.RestAssured;
+import io.restassured.http.Header;
+import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
@@ -173,6 +175,30 @@ public class GetUsers {
             headers(headers);
 
     }
+
+    @Test
+    public void fetchResponseHeadersAndValidate() {
+
+        Response response = given()
+                            .when()
+                                .get("https://reqres.in/api/users?page=2")
+                            .then()
+                                .extract().response();
+
+        Headers headers = response.getHeaders();
+        for(Header eachHeader : headers) {
+            System.out.println(eachHeader.getName()+" : "+eachHeader.getValue());
+        }
+
+        for(Header eachHeader : headers) {
+            if(eachHeader.getName().equals("Server")) {
+                System.out.println(eachHeader.getName() + " : " + eachHeader.getValue());
+                assertEquals(eachHeader.getValue(), "cloudflare");
+            }
+        }
+
+    }
+
 
 
 }
