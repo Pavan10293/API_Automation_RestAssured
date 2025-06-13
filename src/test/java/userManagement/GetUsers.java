@@ -227,4 +227,21 @@ public class GetUsers {
         //Cookies an also be passed as a Map  of <String, String> like it's done for headers above in automateMultipleHeadersUsingMap().
     }
 
+    @Test
+    public void testFetchResponseCookies() {
+
+        Response response = given()
+                            .when()
+                                .get("https://reqres.in/api/users?page=2")
+                            .then()
+                                .extract().response();
+
+        Map<String, String> responseCookies = response.getCookies();
+        assertThat(responseCookies, hasKey("JSESSIONID"));
+        assertThat(responseCookies, hasKey("ABCDEF123456"));
+
+        Cookies responseCookies1 = response.getDetailedCookies();
+        assertEquals(responseCookies1.getValue("JSESSIONID"), "ABCDEF123456");
+
+    }
 }
