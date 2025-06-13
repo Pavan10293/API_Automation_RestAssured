@@ -244,4 +244,18 @@ public class GetUsers {
         assertEquals(responseCookies1.getValue("JSESSIONID"), "ABCDEF123456");
 
     }
+
+    @Test
+    public void validateResponseBodyGetBasicAuth() {
+
+        Response response = given()
+                                .auth()
+                                    .basic("postman", "password")
+                            .when()
+                                .get("https://postman-echo.com/basic-auth");
+
+        int responseStatusCode = response.getStatusCode();
+        assertEquals(responseStatusCode, 200);
+        System.out.println(response.body().asString());
+    }
 }
