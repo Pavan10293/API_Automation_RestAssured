@@ -1,6 +1,8 @@
 package userManagement;
 
 import io.restassured.RestAssured;
+import io.restassured.http.Cookie;
+import io.restassured.http.Cookies;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
@@ -199,6 +201,30 @@ public class GetUsers {
 
     }
 
+    @Test
+    public void testUseCookies() {
 
+        given()
+            .cookie("test", "testing")
+            .cookie("test2", "testing2")
+        .when()
+             .get("https://reqres.in/api/users?page=2")
+        .then()
+             .statusCode(200)
+             .body("response", equalTo("expected_value"));
+
+        //Using Cookie Builder
+        Cookie myCookie = new Cookie.Builder("", "").build();
+
+        given()
+            .cookie(myCookie)
+        .when()
+             .get("https://reqres.in/api/users?page=2")
+        .then()
+              .statusCode(200)
+              .body("response", equalTo("expected_value"));
+
+        //Cookies an also be passed as a Map  of <String, String> like it's done for headers above in automateMultipleHeadersUsingMap().
+    }
 
 }
