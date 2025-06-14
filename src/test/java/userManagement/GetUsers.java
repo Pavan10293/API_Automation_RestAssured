@@ -1,5 +1,6 @@
 package userManagement;
 
+import core.StatusCode;
 import io.restassured.RestAssured;
 import io.restassured.http.Cookie;
 import io.restassured.http.Cookies;
@@ -264,10 +265,10 @@ public class GetUsers {
         Response response = given()
                                 .auth().basic("postman", "password")
                             .when()
-                                .get("https://postman-echo.com/basic-auth");
+                                .get("https://postman-echo.com/digest-auth");
 
         int responseStatusCode = response.getStatusCode();
-        assertEquals(responseStatusCode, 200);
+        assertEquals(responseStatusCode, StatusCode.SUCCESS.code);
         System.out.println(response.body().asString());
     }
 
@@ -279,7 +280,8 @@ public class GetUsers {
                             .when()
                                 .delete("https://reqres.in/api/users/2");
 
-        assertEquals(response.getStatusCode(), 204);
+        assertEquals(response.getStatusCode(), StatusCode.NO_CONTENT.code);
 
     }
+
 }
