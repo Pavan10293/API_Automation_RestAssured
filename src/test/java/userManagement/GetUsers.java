@@ -271,5 +271,15 @@ public class GetUsers {
         System.out.println(response.body().asString());
     }
 
+    @Test
+    public void automateDeleteRequest() {
 
+        Response response = given()
+                                .header("x-api-key", "reqres-free-v1")
+                            .when()
+                                .delete("https://reqres.in/api/users/2");
+
+        assertEquals(response.getStatusCode(), 204);
+
+    }
 }
