@@ -249,8 +249,7 @@ public class GetUsers {
     public void validateResponseBodyGetBasicAuth() {
 
         Response response = given()
-                                .auth()
-                                    .basic("postman", "password")
+                                .auth().basic("postman", "password")
                             .when()
                                 .get("https://postman-echo.com/basic-auth");
 
@@ -258,4 +257,19 @@ public class GetUsers {
         assertEquals(responseStatusCode, 200);
         System.out.println(response.body().asString());
     }
+
+    @Test
+    public void validateResponseBodyGetDigestAuth() {
+
+        Response response = given()
+                                .auth().basic("postman", "password")
+                            .when()
+                                .get("https://postman-echo.com/basic-auth");
+
+        int responseStatusCode = response.getStatusCode();
+        assertEquals(responseStatusCode, 200);
+        System.out.println(response.body().asString());
+    }
+
+
 }
