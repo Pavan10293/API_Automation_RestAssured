@@ -10,6 +10,7 @@ import io.restassured.response.Response;
 import org.json.simple.parser.ParseException;
 import org.testng.annotations.Test;
 import utils.JsonReader;
+import utils.PropertyReader;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -301,6 +302,22 @@ public class GetUsers {
         int responseStatusCode = response.getStatusCode();
         assertEquals(responseStatusCode, 200);
         System.out.println(response.body().asString());
+    }
+
+    @Test
+    public void validateWithDataFromPropertiesFile() {
+
+        String serverAddress = PropertyReader.propertyReader("config.properties", "server");
+
+        System.out.println("Server address from properties file :- " + serverAddress);
+
+        Response response = given()
+                                .queryParam("page", 2)
+                            .when()
+                                 .get(serverAddress);
+
+        int actualStatusCode = response.getStatusCode();
+        assertEquals(actualStatusCode, StatusCode.SUCCESS.code);
     }
 
 }
