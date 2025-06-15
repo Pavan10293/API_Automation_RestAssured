@@ -7,12 +7,15 @@ import io.restassured.http.Cookies;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
+import junit.framework.Assert;
 import org.json.simple.parser.ParseException;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 import utils.JsonReader;
 import utils.PropertyReader;
 
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -338,5 +341,27 @@ public class GetUsers {
 
         int actualStatusCode = response.getStatusCode();
         assertEquals(actualStatusCode, StatusCode.SUCCESS.code);
+    }
+
+    @Test
+    public void hardAssertion() {
+        System.out.println("Hard Assert 1");
+        Assert.assertTrue(false);
+        System.out.println("Hard Assert 2"); //This line won't get executed as the above line throws exception as it's a hard assert.
+    }
+
+    //NOTE: Hard assertion cannot / is not preferred to be used when there are ,multiple assertions in a test script.
+    //Eg. asserting various values of a response body.
+
+    @Test
+    public void softAssertion() {
+        SoftAssert softAssertion = new SoftAssert();
+        System.out.println("Soft Assert 1");
+        softAssertion.assertTrue(false);
+        softAssertion.assertTrue(true);
+        System.out.println("Soft Assert 2");
+
+        //Where soft assertions are used, to make the test script indicate which assertion failed, assertAll() should be called
+        softAssertion.assertAll();
     }
 }
