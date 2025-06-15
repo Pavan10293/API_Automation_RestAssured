@@ -9,17 +9,15 @@ import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import junit.framework.Assert;
 import org.json.simple.parser.ParseException;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-import org.testng.asserts.SoftAssert;
 import utils.JsonReader;
 import utils.PropertyReader;
 import utils.SoftAssertionUtil;
 
 import java.io.IOException;
-import java.sql.SQLOutput;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
@@ -257,32 +255,6 @@ public class GetUsers {
     }
 
     @Test
-    public void validateResponseBodyGetBasicAuth() {
-
-        Response response = given()
-                                .auth().basic("postman", "password")
-                            .when()
-                                .get("https://postman-echo.com/basic-auth");
-
-        int responseStatusCode = response.getStatusCode();
-        assertEquals(responseStatusCode, 200);
-        System.out.println(response.body().asString());
-    }
-
-    @Test
-    public void validateResponseBodyGetDigestAuth() {
-
-        Response response = given()
-                                .auth().basic("postman", "password")
-                            .when()
-                                .get("https://postman-echo.com/digest-auth");
-
-        int responseStatusCode = response.getStatusCode();
-        assertEquals(responseStatusCode, StatusCode.SUCCESS.code);
-        System.out.println(response.body().asString());
-    }
-
-    @Test
     public void automateDeleteRequest() {
 
         Response response = given()
@@ -292,22 +264,6 @@ public class GetUsers {
 
         assertEquals(response.getStatusCode(), StatusCode.NO_CONTENT.code);
 
-    }
-
-    @Test
-    public void validateWithTestDataFromJson() throws IOException, ParseException {
-
-        String username = JsonReader.getTestData("username");
-        String password = JsonReader.getTestData("password");
-
-        Response response = given()
-                .auth().basic(username, password)
-                .when()
-                .get("https://postman-echo.com/basic-auth");
-
-        int responseStatusCode = response.getStatusCode();
-        assertEquals(responseStatusCode, 200);
-        System.out.println(response.body().asString());
     }
 
     @Test
@@ -366,5 +322,29 @@ public class GetUsers {
 
         //Where soft assertions are used, to make the test script indicate which assertion failed, assertAll() should be called
         softAssertion.assertAll();
+    }
+
+    @DataProvider(name="testData")
+    public Object[][] testData() {
+        return new Object[][]{
+                {"1", "John"},
+                {"2", "Jane"},
+                {"3", "Bob"}
+        };
+    }
+
+    @Test(dataProvider = "testData")
+    @Parameters({"id", "name"})
+    public void testEndPoint(String id, String name) {
+
+        given()
+             .header("x-api-key", "reqres-free-v1")
+             .queryParam("id", id)
+             .queryParam("name", name)
+        .when()
+             .get("https://reqres.in/api/users")
+        .then()
+             .statusCode(200);
+
     }
 }
