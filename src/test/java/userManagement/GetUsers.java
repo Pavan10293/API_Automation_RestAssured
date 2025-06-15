@@ -239,7 +239,7 @@ public class GetUsers {
 
     }
 
-    @Test
+    @Test (groups = {"SmokeSuite", "RegressionSuite"})
     public void automateDeleteRequest() {
 
         Response response = given()
@@ -251,7 +251,7 @@ public class GetUsers {
 
     }
 
-    @Test
+    @Test (groups = "RegressionSuite")
     public void validateWithDataFromPropertiesFile() {
 
         String serverAddress = PropertyReader.propertyReader("config.properties", "server");

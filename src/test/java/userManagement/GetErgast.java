@@ -8,7 +8,7 @@ import static org.testng.Assert.assertEquals;
 
 public class GetErgast {
 
-    @Test
+    @Test(groups = "RegressionSuite")
     public void validateStatusCodeWithPathParameterInRequest() {
 
         Response response = given()
