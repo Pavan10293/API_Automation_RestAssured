@@ -7,8 +7,11 @@ import io.restassured.http.Cookies;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
+import org.json.simple.parser.ParseException;
 import org.testng.annotations.Test;
+import utils.JsonReader;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -282,6 +285,22 @@ public class GetUsers {
 
         assertEquals(response.getStatusCode(), StatusCode.NO_CONTENT.code);
 
+    }
+
+    @Test
+    public void validateWithTestDataFromJson() throws IOException, ParseException {
+
+        String username = JsonReader.getTestData("username");
+        String password = JsonReader.getTestData("password");
+
+        Response response = given()
+                .auth().basic(username, password)
+                .when()
+                .get("https://postman-echo.com/basic-auth");
+
+        int responseStatusCode = response.getStatusCode();
+        assertEquals(responseStatusCode, 200);
+        System.out.println(response.body().asString());
     }
 
 }
