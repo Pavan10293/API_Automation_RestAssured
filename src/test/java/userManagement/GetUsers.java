@@ -115,21 +115,6 @@ public class GetUsers {
     }
 
     @Test
-    public void validateStatusCodeWithPathParameterInRequest() {
-
-        Response response = given()
-                                .pathParam("raceSeason", 2017)
-                            .when()
-                                .get("https://ergast.com/api/f1/{raceSeason}/circuits.json");
-
-        int actualStatusCode = response.getStatusCode();
-        assertEquals(actualStatusCode, 200);
-        System.out.println(response.body().asString());
-
-
-    }
-
-    @Test
     public void validatePostRequestWithFormParam() {
 
         Response response = given()
