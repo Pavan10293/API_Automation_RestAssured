@@ -13,6 +13,7 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import utils.JsonReader;
 import utils.PropertyReader;
+import utils.SoftAssertionUtil;
 
 import java.io.IOException;
 import java.sql.SQLOutput;
@@ -28,6 +29,8 @@ import static org.hamcrest.Matchers.*;
 import static org.testng.Assert.assertEquals;
 
 public class GetUsers {
+
+    SoftAssertionUtil softAssertion = new SoftAssertionUtil();
 
     @Test
     public void getUsersData() {
@@ -355,10 +358,10 @@ public class GetUsers {
 
     @Test
     public void softAssertion() {
-        SoftAssert softAssertion = new SoftAssert();
+
         System.out.println("Soft Assert 1");
-        softAssertion.assertTrue(false);
-        softAssertion.assertTrue(true);
+        softAssertion.assertTrue(false, "");
+        softAssertion.assertTrue(true, "");
         System.out.println("Soft Assert 2");
 
         //Where soft assertions are used, to make the test script indicate which assertion failed, assertAll() should be called
