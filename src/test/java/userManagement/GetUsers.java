@@ -314,10 +314,29 @@ public class GetUsers {
         Response response = given()
                                 .queryParam("page", 2)
                             .when()
-                                 .get(serverAddress);
+                                 .get(serverAddress+"users");
 
         int actualStatusCode = response.getStatusCode();
         assertEquals(actualStatusCode, StatusCode.SUCCESS.code);
     }
 
+
+    @Test
+    public void validateWithDataFromPropertiesFileAndTestData() throws IOException, ParseException {
+
+        String serverAddress = PropertyReader.propertyReader("config.properties", "server");
+        String endPoint = JsonReader.getTestData("endpoint");
+        String endPointURL = serverAddress+endPoint;
+
+        System.out.println("Server address from properties file :- " + serverAddress);
+        System.out.println("URL :- " + endPointURL);
+
+        Response response = given()
+                .queryParam("page", 2)
+                .when()
+                .get(endPointURL);
+
+        int actualStatusCode = response.getStatusCode();
+        assertEquals(actualStatusCode, StatusCode.SUCCESS.code);
+    }
 }
