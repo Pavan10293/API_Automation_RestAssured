@@ -1,5 +1,8 @@
 {
   "username": "postman",
   "password": "password",
-  "endpoint": "users"
+  "endpoint": "users",
+  "languages": ["Java", "JavaFX", "Python"],
+  "technologies": ["AI", "ML", "Analytics"],
+  "Marks": [1,2,3]
 }
