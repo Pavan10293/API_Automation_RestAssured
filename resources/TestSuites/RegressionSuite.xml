@@ -7,5 +7,9 @@
                 <include name="RegressionSuite"/>
             </run>
         </groups>
+        <classes>
+            <class name="userManagement.GetUsers"/>
+            <class name="userManagement.GetErgast"/>
+        </classes>
     </test>
 </suite>
