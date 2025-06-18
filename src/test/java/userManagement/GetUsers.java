@@ -19,6 +19,7 @@ import utils.SoftAssertionUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -340,19 +341,59 @@ public class GetUsers {
         JsonReader.getJsonArrayDataAtAnIndex("languages", 2);
     }
 
+    private static FileInputStream fileInputStream(String requestBodyFileName) {
+        FileInputStream fileInputStream;
+        try {
+             fileInputStream = new FileInputStream(new File(System.getProperty("user.dir") +
+                    "/resources/TestData/"+requestBodyFileName));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        return fileInputStream;
+    }
+
     @Test
     public void validatePostRequestWithRequestBodyFromJsonFile() throws IOException {
 
         Response response = given()
-                .header("x-api-key", "reqres-free-v1")
+                                .header("x-api-key", "reqres-free-v1")
                                 .header("Content-Type", "application/json")
-                                .body(IOUtils.toString(new FileInputStream(new File(System.getProperty("user.dir") +
-                                                "/resources/TestData/postRequestBody.json"))))
-                                        .when()
-                                                .post("https://reqres.in/api/users");
+                                .body(IOUtils.toString(fileInputStream("postRequestBody.json")))
+                            .when()
+                                .post("https://reqres.in/api/users");
 
         System.out.println(response.getBody().asString());
         assertEquals(response.getStatusCode(), StatusCode.CREATED.code);
-
     }
+
+
+    @Test
+    public void validatePatchRequestWithRequestBodyFromJsonFile() throws IOException {
+
+        Response response = given()
+                                .header("x-api-key", "reqres-free-v1")
+                                .header("Content-Type", "application/json")
+                                .body(IOUtils.toString(fileInputStream("patchRequestBody.json")))
+                            .when()
+                                .patch("https://reqres.in/api/users/2");
+
+        System.out.println(response.getBody().asString());
+        assertEquals(response.getStatusCode(), StatusCode.SUCCESS.code);
+    }
+
+    @Test
+    public void validatePutRequestWithRequestBodyFromJsonFile() throws IOException {
+
+        Response response = given()
+                                .header("x-api-key", "reqres-free-v1")
+                                .header("Content-Type", "application/json")
+                                .body(IOUtils.toString(fileInputStream("putRequestBody.json")))
+                            .when()
+                                .put("https://reqres.in/api/users/2");
+
+        System.out.println(response.getBody().asString());
+        assertEquals(response.getStatusCode(), StatusCode.SUCCESS.code);
+    }
+
+
 }
