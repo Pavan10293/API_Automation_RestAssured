@@ -8,6 +8,7 @@ import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import junit.framework.Assert;
+import org.apache.commons.io.IOUtils;
 import org.json.simple.parser.ParseException;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Parameters;
@@ -16,12 +17,13 @@ import utils.JsonReader;
 import utils.PropertyReader;
 import utils.SoftAssertionUtil;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.when;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.testng.Assert.assertEquals;
@@ -336,5 +338,21 @@ public class GetUsers {
     @Test
     public void Test() throws IOException, ParseException {
         JsonReader.getJsonArrayDataAtAnIndex("languages", 2);
+    }
+
+    @Test
+    public void validatePostRequestWithRequestBodyFromJsonFile() throws IOException {
+
+        Response response = given()
+                .header("x-api-key", "reqres-free-v1")
+                                .header("Content-Type", "application/json")
+                                .body(IOUtils.toString(new FileInputStream(new File(System.getProperty("user.dir") +
+                                                "/resources/TestData/postRequestBody.json"))))
+                                        .when()
+                                                .post("https://reqres.in/api/users");
+
+        System.out.println(response.getBody().asString());
+        assertEquals(response.getStatusCode(), StatusCode.CREATED.code);
+
     }
 }
