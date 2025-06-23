@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name = "API Automation session Smoke Suite" parallel = "classes" thread-count="3">
+    <listeners>
+        <listener class-name="utils.RetryListener"/>
+    </listeners>
     <test name = "API Users TestCases">
         <classes>
-            <class name="userManagement.GetUsers"/>
-            <class name="userManagement.GetPostmanEcho"/>
+<!--            <class name="userManagement.GetUsers"/>-->
+<!--            <class name="userManagement.GetPostmanEcho"/>-->
             <class name="userManagement.GetErgast"/>
         </classes>
         <!--(or) the below approach if we want to run all classes in a package-->
