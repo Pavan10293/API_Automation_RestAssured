@@ -1,5 +1,6 @@
 package userManagement;
 
+import core.BaseTest;
 import core.StatusCode;
 import io.restassured.RestAssured;
 import io.restassured.http.Cookie;
@@ -13,6 +14,7 @@ import org.json.simple.parser.ParseException;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+import utils.ExtentReport;
 import utils.JsonReader;
 import utils.PropertyReader;
 import utils.SoftAssertionUtil;
@@ -29,7 +31,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.testng.Assert.assertEquals;
 
-public class GetUsers {
+public class GetUsers extends BaseTest {
 
     SoftAssertionUtil softAssertion = new SoftAssertionUtil();
 
@@ -245,6 +247,8 @@ public class GetUsers {
     @Test (groups = {"SmokeSuite", "RegressionSuite"})
     public void automateDeleteRequest() {
 
+        ExtentReport.extentlog = ExtentReport.extentreport.startTest("verifyStatusCodeDelete", "Validate 204 status code for DELETE method");
+
         Response response = given()
                                 .header("x-api-key", "reqres-free-v1")
                             .when()
@@ -256,6 +260,8 @@ public class GetUsers {
 
     @Test (groups = "RegressionSuite")
     public void validateWithDataFromPropertiesFile() {
+
+        ExtentReport.extentlog = ExtentReport.extentreport.startTest("validateWithDataFromPropertiesFile", "Validate 200 status code for GET method");
 
         String serverAddress = PropertyReader.propertyReader("config.properties", "server");
 
