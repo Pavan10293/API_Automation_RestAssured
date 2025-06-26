@@ -3,6 +3,7 @@ package utils;
 import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.File;
@@ -21,8 +22,12 @@ public class JsonReader {
         File Filename = new File("resources//TestData//testData.json");
         String jsonString = FileUtils.readFileToString(Filename, "UTF-8");
 
-        Object obj = new org.json.simple.parser.JSONParser().parse(jsonString);
-        return (JSONObject) obj;
+        JSONParser parser = new JSONParser();
+        JSONObject jsonObject = (JSONObject) parser.parse(jsonString);
+
+        return jsonObject;
+//        Object obj = new org.json.simple.parser.JSONParser().parse(jsonString);
+//        return (JSONObject) obj;
     }
 
     public static JSONArray getJsonArray(String key) throws IOException, ParseException {
