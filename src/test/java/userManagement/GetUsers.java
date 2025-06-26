@@ -24,7 +24,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
@@ -380,6 +382,29 @@ public class GetUsers extends BaseTest {
         PostRequestBody postRequestBody = new PostRequestBody();
         postRequestBody.setName("Morpheus");
         postRequestBody.setJob("Leader");
+
+        Response response = given()
+                .header("x-api-key", "reqres-free-v1")
+                .header("Content-Type", "application/json")
+                .body(postRequestBody)
+                .when()
+                .post("https://reqres.in/api/users");
+
+        System.out.println(response.getBody().asString());
+        assertEquals(response.getStatusCode(), StatusCode.CREATED.code);
+    }
+
+    @Test
+    public void validatePostRequestWithRequestBodyFromPojoList() throws IOException {
+
+        List<String> listOfLanguages = new ArrayList<String>();
+        listOfLanguages.add("Java");
+        listOfLanguages.add("Python");
+
+        PostRequestBody postRequestBody = new PostRequestBody();
+        postRequestBody.setName("Morpheus");
+        postRequestBody.setJob("Leader");
+        postRequestBody.setLanguages(listOfLanguages);
 
         Response response = given()
                 .header("x-api-key", "reqres-free-v1")
