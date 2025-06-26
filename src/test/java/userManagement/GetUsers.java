@@ -14,6 +14,7 @@ import org.json.simple.parser.ParseException;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+import pojo.PostRequestBody;
 import utils.ExtentReport;
 import utils.JsonReader;
 import utils.PropertyReader;
@@ -27,6 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.post;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.testng.Assert.assertEquals;
@@ -367,6 +369,24 @@ public class GetUsers extends BaseTest {
                                 .body(IOUtils.toString(fileInputStream("postRequestBody.json")))
                             .when()
                                 .post("https://reqres.in/api/users");
+
+        System.out.println(response.getBody().asString());
+        assertEquals(response.getStatusCode(), StatusCode.CREATED.code);
+    }
+
+    @Test
+    public void validatePostRequestWithRequestBodyFromPojo() throws IOException {
+
+        PostRequestBody postRequestBody = new PostRequestBody();
+        postRequestBody.setName("Morpheus");
+        postRequestBody.setJob("Leader");
+
+        Response response = given()
+                .header("x-api-key", "reqres-free-v1")
+                .header("Content-Type", "application/json")
+                .body(postRequestBody)
+                .when()
+                .post("https://reqres.in/api/users");
 
         System.out.println(response.getBody().asString());
         assertEquals(response.getStatusCode(), StatusCode.CREATED.code);
