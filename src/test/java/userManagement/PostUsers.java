@@ -51,4 +51,25 @@ public class PostUsers {
         assertEquals(response.getStatusCode(), StatusCode.CREATED.code);
     }
 
+    @Test
+    public void validatePatchWithResponsePojo() {
+        String name = "Morpheus";
+
+        PostRequestBody patchRequest = new PostRequestBody();
+        patchRequest.setName(name);
+
+        Response response = given()
+                .header("x-api-key", "reqres-free-v1")
+                .header("Content-Type", "application/json")
+                .body(patchRequest)
+                .when()
+                .patch("https://reqres.in/api/users/2");
+
+        PostRequestBody responseBody = response.as(PostRequestBody.class);
+        System.out.println(responseBody.getName());
+        assertEquals(responseBody.getName(), name);
+
+        assertEquals(response.getStatusCode(), StatusCode.SUCCESS.code);
+    }
+
 }
